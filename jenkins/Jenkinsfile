@@ -1,0 +1,122 @@
+#!/usr/local/env groovy
+
+/*
+  Provision terraform webapp
+*/
+
+pipeline {
+    agent {
+        docker {
+            image 'hashicorp/terraform:latest'
+            args '--entrypoint=""'
+        }
+    }
+
+    parameters {
+        choice(
+            choices: ['output' , 'plan' , 'apply' , 'show', 'preview-destroy' , 'destroy'],
+            description: 'Terraform action',
+            name: 'ACTION')
+        choice(
+            choices: ['us-east-1','sa-east-1'],
+            description: 'Amazon region',
+            name: 'REGION')
+        choice(
+            choices: ['develop','staging','production'],
+            description: 'Envirnonment',
+            name: 'TIER')
+    }
+
+    environment {
+        BACKEND_KEY = "webapp"
+    }
+
+    stages {
+        stage('init') {
+            steps {
+                checkout scm
+
+                sh """
+                terraform init -reconfigure \
+                -backend-config="key=${BACKEND_KEY}/${REGION}/terraform.tfstate" \
+                -backend-config="bucket=${BACKEND_BUCKET}" \
+                -backend-config="kms_key_id=${BACKEND_KMS_KEY}" \
+                -backend-config="encrypt=true"
+                """
+            }
+        }
+        stage('plan') {
+            when {
+                expression { params.ACTION == 'plan' }
+            }
+            steps {
+                sh """
+                terraform plan -var-file=../conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.terraform-hub.plan
+                """
+            }
+        }
+
+        stage('apply') {
+            when {
+                expression { params.ACTION == 'apply' }
+            }
+            steps {
+                script {
+                    def userInput = input(id: 'confirm', message: 'Apply deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Continuos deploy', name: 'confirm'] ])
+                }
+                sh """
+                terraform plan -var-file=../conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.terraform.plan
+                terraform apply .terraform.plan
+                """
+            }
+        }
+
+        stage('preview-destroy') {
+            when {
+                expression { params.ACTION == 'preview-destroy' }
+            }
+            steps {
+                sh """
+                terraform plan -destroy -var-file=../conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars
+                """
+            }
+        }
+
+        stage('destroy') {
+            when {
+                expression { params.ACTION == 'destroy' }
+            }
+            steps {
+                script {
+                    def userInput = input(id: 'confirm', message: 'Apply deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Continuos deploy', name: 'confirm'] ])
+                }
+                sh """
+                terraform plan -destroy -var-file=../conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.destroy.plan
+                terraform apply .destroy.plan
+                """
+            }
+        }
+
+        stage('show') {
+            when {
+                expression { params.ACTION == 'show' }
+            }
+            steps {
+                sh """
+                terraform show -no-color
+                """
+            }
+        }
+
+        stage('output') {
+            when {
+                expression { params.ACTION == 'output' }
+            }
+            steps {
+                sh """
+                terraform output -json
+                """
+            }
+        }
+    }
+}
