@@ -41,7 +41,6 @@ pipeline {
                 -backend-config="key=${BACKEND_KEY}/${REGION}/terraform.tfstate" \
                 -backend-config="bucket=${BACKEND_BUCKET}" \
                 -backend-config="kms_key_id=${BACKEND_KMS_KEY}" \
-                -backend-config="region=${REGION}" \
                 -backend-config="encrypt=true"
                 """
             }
