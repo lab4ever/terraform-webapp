@@ -51,7 +51,7 @@ pipeline {
             }
             steps {
                 sh """
-                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.terraform-hub.plan
+                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.terraform-hub.plan
                 """
             }
         }
@@ -65,7 +65,7 @@ pipeline {
                     def userInput = input(id: 'confirm', message: 'Apply deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Continuos deploy', name: 'confirm'] ])
                 }
                 sh """
-                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.terraform.plan
+                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.terraform.plan
                 terraform apply .terraform.plan
                 """
             }
@@ -77,7 +77,7 @@ pipeline {
             }
             steps {
                 sh """
-                terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars
+                terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars
                 """
             }
         }
@@ -91,7 +91,7 @@ pipeline {
                     def userInput = input(id: 'confirm', message: 'Apply deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Continuos deploy', name: 'confirm'] ])
                 }
                 sh """
-                terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=../conf/global.tfvars -out=.destroy.plan
+                terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.destroy.plan
                 terraform apply .destroy.plan
                 """
             }
