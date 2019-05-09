@@ -38,7 +38,7 @@ pipeline {
 
                 sh """
                 terraform init -reconfigure \
-                -backend-config="key=${BACKEND_KEY}/${REGION}/terraform.tfstate" \
+                -backend-config="key=${TIER}/${BACKEND_KEY}/${REGION}/terraform.tfstate" \
                 -backend-config="bucket=${BACKEND_BUCKET}" \
                 -backend-config="kms_key_id=${BACKEND_KMS_KEY}" \
                 -backend-config="region=${BACKEND_REGION}" \
