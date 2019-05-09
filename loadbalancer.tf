@@ -60,7 +60,7 @@ resource "aws_alb_listener_rule" "webapp" {
 
   condition {
     field  = "host-header"
-    values = ["${var.site}*"]
+    values = ["${var.site[var.tier]}*"]
   }
 
   condition {

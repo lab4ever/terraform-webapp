@@ -8,9 +8,20 @@ variable "region" {}
 
 variable "tier" {}
 
-variable "site" {}
+variable "site" {
+  type = "map"
 
-variable "domain" {}
+  default = {
+    production  = "www.lab4ever.com"
+    staging     = "www-s.lab4ever.com"
+    integration = "www-d.lab4ever.com"
+  }
+}
+
+variable "domain" {
+  type    = "string"
+  default = "lab4ever.com"
+}
 
 data "aws_availability_zones" "available" {}
 
