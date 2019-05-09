@@ -70,7 +70,7 @@ resource "aws_alb_listener_rule" "webapp" {
 }
 
 resource "aws_alb_target_group" "webapp" {
-  name        = "webapp"
+  name        = "webapp-${var.tier}"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = "${aws_vpc.webapp.id}"
