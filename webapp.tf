@@ -85,11 +85,7 @@ resource "aws_autoscaling_group" "webapp" {
     "${aws_subnet.private_subnet.*.id}",
   ]
 
-  launch_configuration = "${aws_launch_configuration..name}"
-
-  depends_on = [
-    "aws_subnet.footcoin",
-  ]
+  launch_configuration = "${aws_launch_configuration.webapp.name}"
 
   lifecycle {
     create_before_destroy = true

@@ -40,10 +40,8 @@ resource "aws_alb" "webapp" {
 
 resource "aws_alb_listener" "webapp" {
   load_balancer_arn = "${aws_alb.webapp.arn}"
-  port              = "443"
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-FS-2018-06"
-  certificate_arn   = "${aws_acm_certificate..arn}"
+  port              = "80"
+  protocol          = "HTTP"
 
   "default_action" {
     target_group_arn = "${aws_alb_target_group.webapp.arn}"
