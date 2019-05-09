@@ -16,7 +16,7 @@ resource "aws_security_group" "loadbalancer_webapp" {
     protocol  = "tcp"
 
     security_groups = [
-      "${aws_security_group.webapp}",
+      "${aws_security_group.webapp.id}",
     ]
   }
 
