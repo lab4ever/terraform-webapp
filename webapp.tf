@@ -67,7 +67,7 @@ resource "aws_launch_configuration" "webapp" {
 }
 
 resource "aws_autoscaling_group" "webapp" {
-  name                      = "webapp"
+  name                      = "webapp-${var.tier}"
   desired_capacity          = "0"
   max_size                  = "0"
   min_size                  = "0"
@@ -95,7 +95,7 @@ resource "aws_autoscaling_group" "webapp" {
   tags = [
     "${concat(local.asg_common_tags,list(
           map("key", "Name","propagate_at_launch", "true","value", "webapp-${var.tier}"),
-          map("key", "Application", "propagate_at_launch", "true", "value", "webapp")
+          map("key", "Application", "propagate_at_launch", "true", "value", "webapp-${var.tier}")
      ))}",
   ]
 }
