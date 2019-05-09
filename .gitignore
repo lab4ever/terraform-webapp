@@ -1,0 +1,12 @@
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfplan
+./*.backup
+./*.tfstate
+.terraform/
+*.bak
+.*.swp
+.idea
+*.plan
+*.retry
+*.aws
