@@ -12,9 +12,9 @@ variable "site" {
   type = "map"
 
   default = {
-    production  = "www.lab4ever.com"
-    staging     = "www-s.lab4ever.com"
-    integration = "www-d.lab4ever.com"
+    production = "www.lab4ever.com"
+    staging    = "www-s.lab4ever.com"
+    develop    = "www-d.lab4ever.com"
   }
 }
 
