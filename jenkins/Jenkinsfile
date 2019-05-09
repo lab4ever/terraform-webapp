@@ -97,11 +97,11 @@ pipeline {
                 expression { params.ACTION == 'destroy' }
             }
             steps {
+                sh 'terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.destroy.plan'
                 script {
                     def userInput = input(id: 'confirm', message: 'Apply deploy?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Continuos deploy', name: 'confirm'] ])
                 }
                 sh """
-                terraform plan -destroy -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.destroy.plan
                 terraform apply .destroy.plan
                 """
             }
