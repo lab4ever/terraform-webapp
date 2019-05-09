@@ -43,7 +43,7 @@ resource "aws_key_pair" "webapp" {
 resource "aws_launch_configuration" "webapp" {
   name_prefix = "webapp"
 
-  key_name = "${data.tls_public_key.webapp.public_key_openssh}"
+  key_name = "${aws_key_pair.webapp.key_name}"
 
   root_block_device {
     volume_size           = 8
