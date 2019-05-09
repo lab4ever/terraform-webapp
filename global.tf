@@ -44,9 +44,9 @@ locals {
       value               = "${var.organization}"
     },
     {
-      key                = "Tier"
-      propagate_at_launc = "true"
-      value              = "${var.organization}"
+      key                 = "Tier"
+      propagate_at_launch = "true"
+      value               = "${var.organization}"
     },
   ]
 
