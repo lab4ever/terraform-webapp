@@ -47,27 +47,21 @@ pipeline {
             }
         }
 
-        stage('init') {
+        stage('validate') {
             steps {
-                checkout scm
                 sh """
-                terraform init -reconfigure \
-                -backend-config="key=${BACKEND_KEY}/${REGION}/terraform.tfstate" \
-                -backend-config="bucket=${BACKEND_BUCKET}" \
-                -backend-config="kms_key_id=${BACKEND_KMS_KEY}" \
-                -backend-config="region=${BACKEND_REGION}" \
-                -backend-config="encrypt=true"
+                terraform validate -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars
                 """
             }
         }
-        
+
         stage('plan') {
             when {
                 expression { params.ACTION == 'plan' }
             }
             steps {
                 sh """
-                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.terraform-hub.plan
+                terraform plan -var-file=./conf/${REGION}-${TIER}.tfvars -var-file=./conf/global.tfvars -out=.terraform.plan
                 """
             }
         }
