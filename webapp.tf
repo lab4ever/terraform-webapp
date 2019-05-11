@@ -1,4 +1,3 @@
-
 data "aws_ami" "webapp" {
   most_recent = "true"
 
@@ -75,7 +74,7 @@ resource "aws_launch_configuration" "webapp" {
 
   ebs_optimized               = false
   instance_type               = "t2.micro"
-  image_id                    = "ami-0a313d6098716f372"
+  image_id                    = "${data.aws_ami.webapp.id}"
   security_groups             = ["${aws_security_group.webapp.id}"]
   associate_public_ip_address = false
 
