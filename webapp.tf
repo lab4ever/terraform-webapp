@@ -1,3 +1,25 @@
+
+data "aws_ami" "webapp" {
+  most_recent = "true"
+
+  owners = ["${var.aws_account_id}"]
+
+  filter {
+    name   = "name"
+    values = ["webapp*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  filter {
+    name   = "tag:OS_Version"
+    values = ["Ubuntu*"]
+  }
+}
+
 resource "aws_security_group" "webapp" {
   name        = "webapp"
   description = "Security Group Webapp"
