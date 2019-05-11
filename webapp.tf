@@ -66,6 +66,12 @@ resource "aws_launch_configuration" "webapp" {
 
   key_name = "${aws_key_pair.webapp.key_name}"
 
+  user_data = <<EOF
+  #!/bin/bash
+  apt-get update
+  echo welcome-${var.tier} > /var/www/html/lab4ever/index.html
+  EOF
+
   root_block_device {
     volume_size           = 8
     volume_type           = "gp2"
