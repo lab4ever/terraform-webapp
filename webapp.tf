@@ -89,9 +89,9 @@ resource "aws_launch_configuration" "webapp" {
 
 resource "aws_autoscaling_group" "webapp" {
   name                      = "webapp-${var.tier}"
-  desired_capacity          = "0"
-  max_size                  = "0"
-  min_size                  = "0"
+  desired_capacity          = "1"
+  max_size                  = "1"
+  min_size                  = "1"
   health_check_type         = "EC2"
   health_check_grace_period = 180
   force_delete              = true
